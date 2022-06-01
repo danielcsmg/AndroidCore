@@ -22,22 +22,27 @@ class InformacaoActivity : AppCompatActivity() {
     }
 
     private fun recuperarExibirDados() {
-        val nomeAlune = intent.getStringExtra(NOME_ALUNE)
-        val notaUm = intent.getStringExtra(NOTA_UM)?.toDouble()
-        val notaDois = intent.getStringExtra(NOTA_DOIS)?.toDouble()
-        val notaTres = intent.getStringExtra(NOTA_TRES)?.toDouble()
-        val notaQuatro = intent.getStringExtra(NOTA_QUATRO)?.toDouble()
+        /**
+         * Recuperando o objeto que está chegando a partir da intent
+         * nesse caso usamos getParcelableExtra por que é o tipo de dado
+         * que vamos recuperar da intent e entre os sinais de < e >
+         * passamos a classe que queremos definir o tipo do nosso objeto
+         * que nesse caso é Alune, e por fim passamos a chave para recuperar o valor
+         * Obs: todas as chaves estao declaradas no arquivo de Constantes
+         */
+        val alune = intent.getParcelableExtra<Alune>(ALUNE)
 
-        //TODO receber o objeto alune que esta chegando
-
-        if (nomeAlune != null
-            && notaUm != null
-            && notaDois != null
-            && notaTres != null
-            && notaQuatro != null
-        ) {
-            exibirNomeAlune(nomeAlune)
-            val media = calcularMediaAlune(notaUm, notaDois, notaTres, notaQuatro)
+        /**
+         * Verificação para saber se o objeto está nulo
+         */
+        if (alune != null) {
+            exibirNomeAlune(alune.getNome())
+            val media = calcularMediaAlune(
+                alune.getNotaUm(),
+                alune.getNotaDois(),
+                alune.getNotaTres(),
+                alune.getNotaQuatro()
+            )
             exibirMediaAlune(media)
             exibirMensagemAlune(media)
         }
@@ -62,10 +67,10 @@ class InformacaoActivity : AppCompatActivity() {
         binding.tvMediaAlune.text = media.toString()
     }
 
-    private fun exibirMensagemAlune(media: Double){
-        if (media >= 7){
+    private fun exibirMensagemAlune(media: Double) {
+        if (media >= 7) {
             binding.tvMensagem.text = getString(R.string.mensagem_aprovade)
-        }else{
+        } else {
             binding.tvMensagem.text = getString(R.string.mensagem_reprovade)
         }
     }
